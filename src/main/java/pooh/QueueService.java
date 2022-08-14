@@ -11,18 +11,15 @@ public class QueueService implements Service {
 
     @Override
     public Resp process(Req req) {
-        Resp response = new Resp("", "404");
-        if ("queue".equals(req.getPoohMode())) {
-            if (POST.equals(req.httpRequestType())) {
-                queue.putIfAbsent(req.getSourceName(), new ConcurrentLinkedQueue<>());
-                queue.get(req.getSourceName()).add(req.getParam());
-                response = new Resp("Information posted", "200");
-            }
-            if (GET.equals(req.httpRequestType())) {
-                String text = queue.get(req.getSourceName()).poll();
-                if (text != null) {
-                    response = new Resp(text, "200");
-                }
+        Resp response = new Resp("", "501");
+        if (POST.equals(req.httpRequestType())) {
+            queue.putIfAbsent(req.getSourceName(), new ConcurrentLinkedQueue<>());
+            queue.get(req.getSourceName()).add(req.getParam());
+            response = new Resp("result=positive", "200");
+        } else if (GET.equals(req.httpRequestType())) {
+            String text = queue.getOrDefault(req.getSourceName(), new ConcurrentLinkedQueue<>()).poll();
+            if (text != null) {
+                response = new Resp(text, "200");
             }
         }
         return response;
