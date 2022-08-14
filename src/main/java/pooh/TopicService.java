@@ -17,7 +17,7 @@ public class TopicService implements Service {
             ConcurrentHashMap<String, ConcurrentLinkedQueue<String>> topic = topics.get(req.getSourceName());
             if (topic != null) {
                 topic.forEach((user, queue) -> queue.add(req.getParam()));
-                response = new Resp("result=positive", "200");
+                response = new Resp(req.getParam(), "200");
             }
         } else if (GET.equals(req.httpRequestType())) {
             topics.putIfAbsent(req.getSourceName(), new ConcurrentHashMap<>());
