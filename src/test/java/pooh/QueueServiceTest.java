@@ -33,7 +33,7 @@ public class QueueServiceTest {
         Resp result = queueService.process(
                 new Req("POST", "queue", "weather", paramForPostMethod)
         );
-        assertThat(result.text()).isEqualTo("result=positive");
+        assertThat(result.text()).isEqualTo("temperature=18");
     }
 
 }
